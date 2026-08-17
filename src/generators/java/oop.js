@@ -103,7 +103,7 @@ javaGenerator.forBlock['oop_constructor'] = function (block, generator) {
     const blockArgs = block.arguments_ || [];
 
     for (let i = 0; i < blockArgs.length; i++) {
-        args.push('var ' + generator.nameDB_.getName(blockArgs[i], 'VARIABLE'));
+        args.push('Object ' + generator.nameDB_.getName(blockArgs[i], 'VARIABLE'));
     }
 
     const body = getStatement(generator, block, 'STACK', 'BODY', 'DO', 'MEMBERS');
@@ -118,7 +118,7 @@ javaGenerator.forBlock['oop_method'] = function (block, generator) {
     const blockArgs = block.arguments_ || [];
 
     for (let i = 0; i < blockArgs.length; i++) {
-        args.push('var ' + generator.nameDB_.getName(blockArgs[i], 'VARIABLE'));
+        args.push('Object ' + generator.nameDB_.getName(blockArgs[i], 'VARIABLE'));
     }
 
     const body = getStatement(generator, block, 'STACK', 'BODY', 'DO', 'MEMBERS');

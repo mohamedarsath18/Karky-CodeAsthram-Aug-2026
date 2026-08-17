@@ -45,7 +45,7 @@ javaGenerator.forBlock['essentials_var_set'] = function (block, generator) {
     const varName = generator.getVariableName ? generator.getVariableName(varId) : (block.getField('VAR') ? block.getField('VAR').getText() : (varId || 'x'));
     const valInput = block.getInput('VALUE') ? 'VALUE' : (block.getInput('VAL') ? 'VAL' : null);
     const value = valInput ? (generator.valueToCode(block, valInput, Order.ASSIGNMENT) || 'null') : 'null';
-    return `var ${varName} = ${value};\n`;
+    return `${varName} = ${value};\n`;
 };
 
 // Variable get
@@ -115,7 +115,7 @@ javaGenerator.forBlock['variables_set'] = function (block, generator) {
     const varId = block.getFieldValue('VAR');
     const varName = generator.getVariableName ? generator.getVariableName(varId) : (block.getField('VAR') ? block.getField('VAR').getText() : varId);
     const value = generator.valueToCode(block, 'VALUE', Order.ASSIGNMENT) || 'null';
-    return `var ${varName} = ${value};\n`;
+    return `${varName} = ${value};\n`;
 };
 
 export { javaGenerator };

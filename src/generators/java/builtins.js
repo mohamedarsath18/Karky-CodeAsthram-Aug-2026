@@ -116,11 +116,11 @@ javaGenerator.forBlock['dicts_create_with'] = function (block, generator) {
 };
 
 // List comprehension (convert to Stream)
-javaGenerator.forBlock['controls_list_comprehension'] = function (block, generator) {
-    const variable = generator.nameDB_.getName(block.getFieldValue('VAR'), 'VARIABLE');
-    const list = generator.valueToCode(block, 'LIST', Order.NONE) || 'new ArrayList<>()';
-    const expression = generator.valueToCode(block, 'EXPRESSION', Order.NONE) || variable;
-    const condition = generator.valueToCode(block, 'CONDITION', Order.NONE);
+javaGenerator.forBlock['control_list_comp'] = function (block, generator) {
+    const variable = generator.nameDB_.getName(block.getFieldValue('VAR'), 'VARIABLE') || 'item';
+    const list = generator.valueToCode(block, 'ITER', Order.NONE) || 'new ArrayList<>()';
+    const expression = generator.valueToCode(block, 'EXPR', Order.NONE) || variable;
+    const condition = generator.valueToCode(block, 'COND', Order.NONE);
 
     generator.addImport('java.util.stream.Collectors');
 
@@ -135,21 +135,20 @@ javaGenerator.forBlock['controls_list_comprehension'] = function (block, generat
 };
 
 // Dict comprehension
-javaGenerator.forBlock['controls_dict_comprehension'] = function (block, generator) {
-    const keyVar = generator.nameDB_.getName(block.getFieldValue('KEY_VAR'), 'VARIABLE');
-    const valueVar = generator.nameDB_.getName(block.getFieldValue('VALUE_VAR'), 'VARIABLE');
-    const list = generator.valueToCode(block, 'LIST', Order.NONE) || 'new ArrayList<>()';
-    const keyExpr = generator.valueToCode(block, 'KEY_EXPR', Order.NONE) || keyVar;
-    const valueExpr = generator.valueToCode(block, 'VALUE_EXPR', Order.NONE) || valueVar;
-    const condition = generator.valueToCode(block, 'CONDITION', Order.NONE);
+javaGenerator.forBlock['control_dict_comp'] = function (block, generator) {
+    const variable = generator.nameDB_.getName(block.getFieldValue('VAR'), 'VARIABLE') || 'item';
+    const list = generator.valueToCode(block, 'ITER', Order.NONE) || 'new ArrayList<>()';
+    const keyExpr = generator.valueToCode(block, 'KEY_EXPR', Order.NONE) || variable;
+    const valueExpr = generator.valueToCode(block, 'VALUE_EXPR', Order.NONE) || variable;
+    const condition = generator.valueToCode(block, 'COND', Order.NONE);
 
     generator.addImport('java.util.stream.Collectors');
 
     let code;
     if (condition) {
-        code = `${list}.stream().filter(item -> ${condition}).collect(Collectors.toMap(item -> ${keyExpr}, item -> ${valueExpr}))`;
+        code = `${list}.stream().filter(${variable} -> ${condition}).collect(Collectors.toMap(${variable} -> ${keyExpr}, ${variable} -> ${valueExpr}))`;
     } else {
-        code = `${list}.stream().collect(Collectors.toMap(item -> ${keyExpr}, item -> ${valueExpr}))`;
+        code = `${list}.stream().collect(Collectors.toMap(${variable} -> ${keyExpr}, ${variable} -> ${valueExpr}))`;
     }
 
     return [code, Order.FUNCTION_CALL];

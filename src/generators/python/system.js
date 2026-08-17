@@ -9,8 +9,8 @@ Python.forBlock['system_env_get'] = function (block) {
 };
 // __name__ == "__main__" guard
 Python.forBlock['control_if_main'] = function (block) {
-  const statements = Python.statementToCode(block, 'DO');
-  const code = `if __name__ == "__main__":\n${statements}`;
+  const statements = Python.statementToCode(block, 'DO') || 'pass\n';
+  const code = `if __name__ == "__main__":\n${Python.prefixLines(statements, Python.INDENT)}`;
   return code;
 };
 // Pathlib utilities generator

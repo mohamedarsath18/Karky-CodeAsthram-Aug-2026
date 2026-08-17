@@ -117,7 +117,7 @@ Blockly.defineBlocksWithJsonArray([
 import { createPlusField } from "..\/..\/plugins\/block-plus-minus\/field_plus";
 import { createMinusField } from "..\/..\/plugins\/block-plus-minus\/field_minus";
 const forZipMutator = {
-  itemCount_: 2,
+  itemCount_: 0,
   mutationToDom: function () {
     const container = Blockly.utils.xml.createElement("mutation");
     container.setAttribute("items", this.itemCount_);

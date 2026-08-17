@@ -2,7 +2,7 @@ import { pythonGenerator as Python } from 'blockly/python';
 Python.forBlock['oop_class'] = function (block) {
   const name = block.getFieldValue('NAME') || 'MyClass';
   const base = Python.valueToCode(block, 'BASE', Python.ORDER_NONE) || '';
-  const body = Python.statementToCode(block, 'BODY') || '  pass';
+  const body = Python.statementToCode(block, 'BODY') || '  pass\n';
   const basePart = base ? `(${base})` : '';
   return `class ${name}${basePart}:\n${body}`;
 };
@@ -42,7 +42,7 @@ Python.forBlock['oop_method'] = function (block) {
     params.push(block.getFieldValue('P' + i));
     i++;
   }
-  const body = Python.statementToCode(block, 'DO') || '  pass';
+  const body = Python.statementToCode(block, 'DO') || '  pass\n';
   return `def ${name}(${params.join(', ')}):\n${body}`;
 };
 
@@ -53,7 +53,7 @@ Python.forBlock['oop_constructor'] = function (block) {
     params.push(block.getFieldValue('P' + i));
     i++;
   }
-  const body = Python.statementToCode(block, 'DO') || '  pass';
+  const body = Python.statementToCode(block, 'DO') || '  pass\n';
   return `def __init__(${params.join(', ')}):\n${body}`;
 };
 
@@ -70,7 +70,7 @@ Python.forBlock['oop_super_call'] = function (block) {
 
 Python.forBlock['oop_magic_method'] = function (block) {
   const magicMethod = block.getFieldValue('MAGIC_METHOD');
-  const body = Python.statementToCode(block, 'BODY') || '    pass\\n';
+  const body = Python.statementToCode(block, 'BODY') || '    pass\n';
 
   const methodMap = {
     'STR': '__str__(self)',
@@ -98,14 +98,14 @@ Python.forBlock['oop_magic_method'] = function (block) {
   };
 
   const signature = methodMap[magicMethod] || '__str__(self)';
-  const code = `def ${signature}:\\n${body}`;
+  const code = `def ${signature}:\n${body}`;
   return code;
 };
 
 Python.forBlock['oop_property_decorator'] = function (block) {
   const decoratorType = block.getFieldValue('DECORATOR_TYPE');
   const propName = block.getFieldValue('PROP_NAME') || 'property_name';
-  const body = Python.statementToCode(block, 'BODY') || '    pass\\n';
+  const body = Python.statementToCode(block, 'BODY') || '    pass\n';
 
   let decorator;
   if (decoratorType === 'GETTER') {
@@ -116,14 +116,14 @@ Python.forBlock['oop_property_decorator'] = function (block) {
     decorator = `@${propName}.deleter`;
   }
 
-  const code = `${decorator}\\ndef ${propName}(self):\\n${body}`;
+  const code = `${decorator}\ndef ${propName}(self):\n${body}`;
   return code;
 };
 
 Python.forBlock['oop_class_decorator'] = function (block) {
   const decorator = block.getFieldValue('DECORATOR');
   const methodName = block.getFieldValue('METHOD_NAME') || 'method_name';
-  const body = Python.statementToCode(block, 'BODY') || '    pass\\n';
+  const body = Python.statementToCode(block, 'BODY') || '    pass\n';
 
   // Get parameters
   let params = [];
@@ -139,6 +139,6 @@ Python.forBlock['oop_class_decorator'] = function (block) {
 
   const decoratorAnnotation = decorator === 'CLASSMETHOD' ? '@classmethod' : '@staticmethod';
   const paramStr = params.length > 0 ? params.join(', ') : '';
-  const code = `${decoratorAnnotation}\\ndef ${methodName}(${paramStr}):\\n${body}`;
+  const code = `${decoratorAnnotation}\ndef ${methodName}(${paramStr}):\n${body}`;
   return code;
 };

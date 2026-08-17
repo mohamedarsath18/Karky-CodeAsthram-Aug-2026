@@ -49,7 +49,14 @@ javaGenerator.forBlock['control_for_indexed'] = function (block, generator) {
 
 javaGenerator.forBlock['control_for_zip'] = function (block, generator) {
     const branch = getStatement(generator, block, 'DO', 'STACK', 'BODY');
-    return `// Zip iteration\nfor (int i = 0; i < 10; i++) {\n${branch}}\n`;
+    const lists = [];
+    for (let i = 0; i < (block.itemCount_ || 0); i++) {
+        lists.push(generator.valueToCode(block, 'ADD' + i, Order.NONE) || 'new Object[]{}');
+    }
+    if (lists.length === 0) return '';
+    const lenStrs = lists.map(l => `${l}.length`);
+    const lenExpr = lenStrs.reduce((acc, curr) => `Math.min(${acc}, ${curr})`);
+    return `// Zip iteration\nfor (int i = 0; i < ${lenExpr}; i++) {\n${branch}}\n`;
 };
 
 javaGenerator.forBlock['control_try_except'] = function (block, generator) {

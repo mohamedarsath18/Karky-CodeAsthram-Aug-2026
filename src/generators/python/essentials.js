@@ -28,13 +28,13 @@ Python.forBlock['control_pass_simple'] = function (block) {
 Python.forBlock['control_while_true'] = function (block) {
   const mode = block.getFieldValue('COND_MODE');
   const cond = mode === 'EXPR' ? (Python.valueToCode(block, 'COND', Python.ORDER_NONE) || 'True') : 'True';
-  const body = Python.statementToCode(block, 'DO') || '  pass';
+  const body = Python.statementToCode(block, 'DO') || '  pass\n';
   return `while ${cond}:\n${body}`;
 };
 Python.forBlock['control_while_true_inline'] = function (block) {
   const mode = block.getFieldValue('COND_MODE');
   const cond = mode === 'EXPR' ? (Python.valueToCode(block, 'COND', Python.ORDER_NONE) || 'True') : 'True';
-  const body = Python.statementToCode(block, 'DO') || '  pass';
+  const body = Python.statementToCode(block, 'DO') || '  pass\n';
   return `while ${cond}:\n${body}`;
 };
 

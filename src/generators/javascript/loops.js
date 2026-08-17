@@ -89,3 +89,23 @@ javascriptGenerator.forBlock['control_while_true_inline'] = function(block, gene
   const branch = generator.statementToCode(block, 'DO');
   return `while (${cond}) {\n${branch}}\n`;
 };
+
+javascriptGenerator.forBlock['control_for_indexed'] = function (block, generator) {
+    const indexVar = generator.nameDB_ ? generator.nameDB_.getName(block.getFieldValue('INDEX_VAR'), 'VARIABLE') : (block.getFieldValue('INDEX_VAR') || 'i');
+    const valueVar = generator.nameDB_ ? generator.nameDB_.getName(block.getFieldValue('VALUE_VAR'), 'VARIABLE') : (block.getFieldValue('VALUE_VAR') || 'item');
+    const list = generator.valueToCode(block, 'LIST', generator.ORDER_NONE) || '[]';
+    const branch = generator.statementToCode(block, 'DO');
+    return `for (let ${indexVar} = 0; ${indexVar} < ${list}.length; ${indexVar}++) {\n  let ${valueVar} = ${list}[${indexVar}];\n${branch}}\n`;
+};
+
+javascriptGenerator.forBlock['control_for_zip'] = function (block, generator) {
+    const branch = generator.statementToCode(block, 'DO');
+    const lists = [];
+    for (let i = 0; i < (block.itemCount_ || 0); i++) {
+        lists.push(generator.valueToCode(block, 'ADD' + i, generator.ORDER_NONE) || '[]');
+    }
+    if (lists.length === 0) return '';
+    const lenStrs = lists.map(l => `${l}.length`);
+    const lenExpr = lenStrs.length > 1 ? `Math.min(${lenStrs.join(', ')})` : lenStrs[0];
+    return `for (let i = 0; i < ${lenExpr}; i++) {\n${branch}}\n`;
+};

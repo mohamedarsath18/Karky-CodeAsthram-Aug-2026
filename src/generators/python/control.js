@@ -65,7 +65,7 @@ Python.forBlock['if_block'] = function (block) {
 
 Python.forBlock['control_match'] = function (block) {
     const subject = Python.valueToCode(block, 'SUBJECT', Python.ORDER_NONE) || 'None';
-    const cases = Python.statementToCode(block, 'CASES');
+    const cases = Python.statementToCode(block, 'CASES') || '  case _:\n    pass\n';
     return `match ${subject}:\n${cases}`;
 };
 
